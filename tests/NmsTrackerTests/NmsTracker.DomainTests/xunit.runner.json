@@ -1,0 +1,8 @@
+{
+    "$schema": "https://xunit.net/schema/current/xunit.runner.schema.json",
+    "culture": "default",
+    "longRunningTestSeconds": 15,
+    "methodDisplayOptions": ["useOperatorMonikers", "replaceUnderscoreWithSpace"],
+    "showLiveOutput": true,
+    "stopOnFail": true
+}
