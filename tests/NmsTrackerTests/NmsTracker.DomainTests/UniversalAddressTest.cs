@@ -1,4 +1,5 @@
 using NmsTracker.Domain;
+using NmsTracker.Domain.Discoveries;
 
 namespace NmsTracker.DomainTests;
 
