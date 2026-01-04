@@ -1,20 +1,19 @@
-namespace NmsTracker.Domain.Discoveries;
+namespace NmsTracker.Domain.Helpers;
 
-public static class CoordinateValues
+public static class CoordinatesHelper
 {
     public const ushort MaxXZ = 0xFFF;
     public const ushort MinXZ = 0;
     public const byte MaxY = 0xFF;
     public const byte MinY = 0;
 
-    public static ushort XFromUA(ushort x) => UAtoGCLut12[x];
-    public static ushort ZFromUA(ushort z) => UAtoGCLut12[z];
-    public static byte YFromUA(byte y) => UAtoGCLut8[y];
+    public static ushort DecodeX(ushort x) => UAtoGCLut12[x];
+    public static ushort DecodeZ(ushort z) => UAtoGCLut12[z];
+    public static byte DecodeY(byte y) => UAtoGCLut8[y];
     
     // Precomputed lookup tables
-    
     /// <summary>
-    /// Lookup table for decoding Galactic Coordinates from Universal Address values.
+    /// Lookup table for converting Universal Address to Galactic Coordinates.
     /// </summary>
     /// <remarks>
     /// <list type="table">
@@ -52,7 +51,7 @@ public static class CoordinateValues
     ];
 
     /// <summary>
-    /// Lookup table for decoding Galactic Coordinates from Universal Address values.
+    /// Lookup table for converting Universal Address to Galactic Coordinates.
     /// </summary>
     /// <remarks>
     /// <list type="table">
