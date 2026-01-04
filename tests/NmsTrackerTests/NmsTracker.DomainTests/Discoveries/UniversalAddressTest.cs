@@ -76,14 +76,16 @@ public class UniversalAddressTest
         const ulong universalUlong = 36037676192792885;
         var ua = new UniversalAddress(universalUlong);
         var gCoords = ua.ToGalacticCoordinates();
-        const ulong gX = 0x934;
-        const ulong gZ = 0x807;
-        const ulong gY = 0xD7;
-        const ulong gPSs = 0x8008;
+        const ushort gX = 0x934;
+        const ushort gZ = 0x807;
+        const byte gY = 0xD7;
+        const ushort gPSs = 0x8008;
+        const byte gG = 0x13;
         Assert.Equal(gX, gCoords.X);
         Assert.Equal(gZ, gCoords.Z);
         Assert.Equal(gY, gCoords.Y);
         Assert.Equal(gPSs, gCoords.PSs);
+        Assert.Equal(gG, gCoords.G);
     }
     
     [Fact]
