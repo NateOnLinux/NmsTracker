@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmsTracker.Domain", "src\Nm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmsTracker.DomainTests", "tests\NmsTrackerTests\NmsTracker.DomainTests\NmsTracker.DomainTests.csproj", "{8030C490-DB56-4E49-83D7-4E4025FC8CFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmsTracker.ApplicationTests", "tests\NmsTrackerTests\NmsTracker.ApplicationTests\NmsTracker.ApplicationTests.csproj", "{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,18 @@ Global
 		{8030C490-DB56-4E49-83D7-4E4025FC8CFA}.Release|x64.Build.0 = Release|Any CPU
 		{8030C490-DB56-4E49-83D7-4E4025FC8CFA}.Release|x86.ActiveCfg = Release|Any CPU
 		{8030C490-DB56-4E49-83D7-4E4025FC8CFA}.Release|x86.Build.0 = Release|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Debug|x64.Build.0 = Debug|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Debug|x86.Build.0 = Debug|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Release|x64.Build.0 = Release|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,5 +192,6 @@ Global
 		{4306D8AB-6667-4ADA-914E-F51B438CA16A} = {744D61E2-7809-4C28-9F8F-883912FA75F5}
 		{4AA4A62E-B49C-4814-9D48-7598359EF309} = {744D61E2-7809-4C28-9F8F-883912FA75F5}
 		{8030C490-DB56-4E49-83D7-4E4025FC8CFA} = {FD270BAE-D195-02D1-E0B7-1D24310509A0}
+		{FDBADEB0-A2CF-485E-AD52-1DB5E1A783E5} = {FD270BAE-D195-02D1-E0B7-1D24310509A0}
 	EndGlobalSection
 EndGlobal
