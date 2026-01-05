@@ -4,7 +4,9 @@ using NmsTracker.Domain.PlayerState;
 namespace NmsTracker.Domain.Discoveries;
 
 /// <summary>
-/// The 64-bit value representing galaxy, region, solar system, and planet
+/// The 64-bit value representing galaxy, region, solar system, and planet.<br/>
+/// See the No Man's Sky Wiki for more information about
+/// <see href="https://nomanssky.miraheze.org/wiki/Universal_Address">Universal Address</see>
 /// </summary>
 /// <param name="Ua">The 64-bit Universal Address</param>
 public readonly record struct UniversalAddress(ulong Ua)
