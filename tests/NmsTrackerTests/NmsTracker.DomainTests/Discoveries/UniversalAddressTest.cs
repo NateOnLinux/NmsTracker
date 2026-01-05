@@ -1,4 +1,6 @@
 using NmsTracker.Domain.Discoveries;
+using NmsTracker.Domain.PlayerState;
+
 namespace NmsTracker.DomainTests.Discoveries;
 public class UniversalAddressTest
 {
@@ -56,17 +58,14 @@ public class UniversalAddressTest
         Assert.Equal(p, ua.P);
     }
     
-    [Fact]
-    public void ConstructingUniversalAddress_FromKnownFields_ProducesExpectedUlong()
+    [Theory]
+    [InlineData(-2048, -2048, -128, 0, 0, 0, 0x0000000000000000UL)]
+    [InlineData(2047, 2047, 127, 255, 4095, 15, 0x00FFFFFFFFFFFFFFUL)]
+    [InlineData(-1739, -2040, -40, 19, 8, 8, 0x0080081358008135UL)]
+    public void FromPlayerCoordinates_ProducesExpectedUA(short x, short z, sbyte y, byte g, ushort ss, byte p, ulong expected)
     {
-        const ushort x = 0x135;
-        const ushort z = 0x8;
-        const byte y = 0x58;
-        const byte g = 0x013;
-        const ushort ss = 0x008;
-        const byte p = 0x008;
-        const ulong expected = 36037676192792885;
-        var ua = new UniversalAddress(x: x, z: z, y: y, g: g, ss: ss, p: p);
+        var pc = new PlayerCoordinates(x, z, y, g, ss, p);
+        var ua = UniversalAddress.FromPlayerCoordinates(pc);
         Assert.Equal(expected, ua.Ua);
     }
     

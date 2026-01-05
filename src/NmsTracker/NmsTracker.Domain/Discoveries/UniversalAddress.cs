@@ -1,4 +1,5 @@
 ﻿using NmsTracker.Domain.Helpers;
+using NmsTracker.Domain.PlayerState;
 
 namespace NmsTracker.Domain.Discoveries;
 
@@ -24,12 +25,18 @@ public readonly record struct UniversalAddress(ulong Ua)
     // specify UL to avoid packing 0's unnecessarily
     public UniversalAddress() : this(0UL) { }
 
-    public UniversalAddress(ushort x = 0, ushort z = 0, byte y = 0, byte g = 0, ushort ss = 0, byte p = 0)
-        : this(Pack(x, z, y, g, ss, p)) { }
+    public static UniversalAddress FromPlayerCoordinates(PlayerCoordinates playerCoords)
+    {
+        var x = (ushort)(playerCoords.X + 2048);
+        var z = (ushort)(playerCoords.Z + 2048);
+        var y = (byte)(playerCoords.Y + 128);
+        var coords = Pack(x, z, y, playerCoords.G, playerCoords.Ss, playerCoords.P);
+        return new UniversalAddress(coords);
+    }
 
     // Pack bits to UA
-    private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) =>
+    private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) => 
         x | ((ulong)z << 12) | ((ulong)y << 24) | ((ulong)g << 32) | ((ulong)ss << 40) | ((ulong)p << 52);
-
+    
     public GalacticCoordinates ToGalacticCoordinates() => GalacticCoordinates.FromUniversalAddress(this);
 }
