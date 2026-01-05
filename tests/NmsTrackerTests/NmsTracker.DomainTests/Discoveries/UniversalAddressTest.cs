@@ -57,34 +57,49 @@ public class UniversalAddressTest
         var ua = new UniversalAddress(universalUlong);
         Assert.Equal(p, ua.P);
     }
-    
+
+    public static TheoryData<(UniversalAddress, PlayerCoordinates)> PlayerCoordinates =>
+    [
+        (new UniversalAddress(0UL), new PlayerCoordinates(-2048, -2048, -128, 0, 0, 0)),
+        (new UniversalAddress(0x00FFFFFFFFFFFFFFUL), new PlayerCoordinates(2047, 2047, 127, 255, 4095, 15)),
+        (new UniversalAddress(0x0080081358008135), new PlayerCoordinates(-1739, -2040, -40, 19, 8, 8))
+    ];
     [Theory]
-    [InlineData(-2048, -2048, -128, 0, 0, 0, 0x0000000000000000UL)]
-    [InlineData(2047, 2047, 127, 255, 4095, 15, 0x00FFFFFFFFFFFFFFUL)]
-    [InlineData(-1739, -2040, -40, 19, 8, 8, 0x0080081358008135UL)]
-    public void FromPlayerCoordinates_ProducesExpectedUA(short x, short z, sbyte y, byte g, ushort ss, byte p, ulong expected)
+    [MemberData(nameof(PlayerCoordinates))]
+    public void ToPlayerCoordinates_ProducesExpectedCoordinates((UniversalAddress ua, PlayerCoordinates pc) coords)
     {
-        var pc = new PlayerCoordinates(x, z, y, g, ss, p);
-        var ua = UniversalAddress.FromPlayerCoordinates(pc);
-        Assert.Equal(expected, ua.Ua);
+        var pc = coords.ua.ToPlayerCoordinates();
+        Assert.Equal(coords.pc, pc);
     }
     
-    [Fact]
-    public void ToGalacticCoordinates_ProducesGalacticCoordinates()
+    [Theory]
+    [MemberData(nameof(PlayerCoordinates))]
+    public void FromPlayerCoordinates_ProducesExpectedAddress((UniversalAddress ua, PlayerCoordinates pc) coords)
     {
-        const ulong universalUlong = 36037676192792885;
-        var ua = new UniversalAddress(universalUlong);
-        var gCoords = ua.ToGalacticCoordinates();
-        const ushort gX = 0x934;
-        const ushort gZ = 0x807;
-        const byte gY = 0xD7;
-        const ushort gPSs = 0x8008;
-        const byte gG = 0x13;
-        Assert.Equal(gX, gCoords.X);
-        Assert.Equal(gZ, gCoords.Z);
-        Assert.Equal(gY, gCoords.Y);
-        Assert.Equal(gPSs, gCoords.PSs);
-        Assert.Equal(gG, gCoords.G);
+        var ua = UniversalAddress.FromPlayerCoordinates(coords.pc);
+        Assert.Equal(coords.ua, ua);
+    }
+
+    public static TheoryData<(UniversalAddress, GalacticCoordinates)> Coordinates =>
+    [
+        (new UniversalAddress(0UL), new GalacticCoordinates(2047, 2047, 127, 0)),
+        (new UniversalAddress(0x00FFFFFFFFFFFFFFUL), new GalacticCoordinates(2046, 2046, 126, 65535, 255)),
+        (new UniversalAddress(0x0080081358008135), new GalacticCoordinates(2356, 2055, 215, 32776, 19))
+    ];
+    [Theory]
+    [MemberData(nameof(Coordinates))]
+    public void ToGalacticCoordinates_ProducesExpectedCoordinates((UniversalAddress ua, GalacticCoordinates gc) coords)
+    {
+        var gc = coords.ua.ToGalacticCoordinates();
+        Assert.Equal(coords.gc, gc);
+    }
+    
+    [Theory]
+    [MemberData(nameof(Coordinates))]
+    public void FromGalacticCoordinates_ProducesExpectedAddress((UniversalAddress ua, GalacticCoordinates gc) coords)
+    {
+        var ua = UniversalAddress.FromGalacticCoordinates(coords.gc);
+        Assert.Equal(coords.ua, ua);
     }
     
     [Fact]
@@ -101,5 +116,21 @@ public class UniversalAddressTest
         Assert.All([ua.X, ua.Z, ua.Ss], v => Assert.Equal(0xFFF, v));
         Assert.All([ua.Y, ua.G], v => Assert.Equal(0xFF, v));
         Assert.Equal(0x0F, ua.P);
+    }
+    
+    [Theory]
+    [InlineData(0x0080081358008135UL)]
+    [InlineData(0x00FFFFFFFFFFFFFFUL)]
+    [InlineData(0x0000000000000000UL)]
+    public void RoundTrip_UaProperties_AreEqual(ulong value)
+    {
+        var ua = new UniversalAddress(value);
+        Assert.Equal(value, ua.Ua);
+        var gc = ua.ToGalacticCoordinates();
+        var ua2 = UniversalAddress.FromGalacticCoordinates(gc);
+        Assert.Equal(value, ua2.Ua);
+        var pc = ua2.ToPlayerCoordinates();
+        var ua3 = UniversalAddress.FromPlayerCoordinates(pc);
+        Assert.Equal(value, ua3.Ua);
     }
 }

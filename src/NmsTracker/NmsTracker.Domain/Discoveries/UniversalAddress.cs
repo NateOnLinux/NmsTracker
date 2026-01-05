@@ -27,6 +27,10 @@ public readonly record struct UniversalAddress(ulong Ua)
     // specify UL to avoid packing 0's unnecessarily
     public UniversalAddress() : this(0UL) { }
 
+    public PlayerCoordinates ToPlayerCoordinates() => PlayerCoordinates.FromUniversalAddress(this);
+
+    public GalacticCoordinates ToGalacticCoordinates() => GalacticCoordinates.FromUniversalAddress(this);
+    
     public static UniversalAddress FromPlayerCoordinates(PlayerCoordinates playerCoords)
     {
         var x = (ushort)(playerCoords.X + 2048);
@@ -36,9 +40,21 @@ public readonly record struct UniversalAddress(ulong Ua)
         return new UniversalAddress(coords);
     }
 
+    public static UniversalAddress FromGalacticCoordinates(GalacticCoordinates galacticCoordinates)
+    {
+        ushort x = CoordinatesHelper.EncodeX(galacticCoordinates.X);
+        ushort z = CoordinatesHelper.EncodeZ(galacticCoordinates.Z);
+        byte y = CoordinatesHelper.EncodeY(galacticCoordinates.Y);
+        byte g = galacticCoordinates.G ?? 0;
+        ushort ss = (ushort)((galacticCoordinates.PSs << 4) >> 4);
+        byte p = (byte)(galacticCoordinates.PSs >> 12);
+        
+        var coords = Pack(x, z, y, g, ss, p);
+        return new UniversalAddress(coords);
+    }
+    
     // Pack bits to UA
     private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) => 
         x | ((ulong)z << 12) | ((ulong)y << 24) | ((ulong)g << 32) | ((ulong)ss << 40) | ((ulong)p << 52);
     
-    public GalacticCoordinates ToGalacticCoordinates() => GalacticCoordinates.FromUniversalAddress(this);
 }

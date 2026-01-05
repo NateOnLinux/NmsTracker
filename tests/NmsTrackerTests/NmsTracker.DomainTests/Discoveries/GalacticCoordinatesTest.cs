@@ -32,25 +32,17 @@ public class GalacticCoordinatesTest
         Assert.Equal(g, coord.G);
     }
 
-    [Fact]
-    public void FromUniversalAddress_ProducesExpectedCoordinates()
+    public static TheoryData<(UniversalAddress, GalacticCoordinates)> Coordinates =>
+    [
+        (new UniversalAddress(0UL), new GalacticCoordinates(2047, 2047, 127, 0)),
+        (new UniversalAddress(0x00FFFFFFFFFFFFFFUL), new GalacticCoordinates(2046, 2046, 126, 65535, 255)),
+        (new UniversalAddress(0x0080081358008135), new GalacticCoordinates(2356, 2055, 215, 32776, 19))
+    ];
+    [Theory]
+    [MemberData(nameof(Coordinates))]
+    public void FromUniversalAddress_ProducesExpectedCoordinates((UniversalAddress ua, GalacticCoordinates gc) coords)
     {
-        const ulong value = 36037676192792885UL;
-        var coord = GalacticCoordinates.FromUniversalAddress(new UniversalAddress(value));
-        
-        // Expected values
-        const ushort x = 0x934;
-        const ushort z = 0x807;
-        const byte y = 0xD7;
-        const byte g = 0x013;
-        const ushort ss = 0x008;
-        const byte p = 0x008;
-        const ushort pss = (ss & 0x0FFF) | ((p & 0x0F) << 12);
-        
-        Assert.Equal(x, coord.X);
-        Assert.Equal(z, coord.Z);
-        Assert.Equal(y, coord.Y);
-        Assert.Equal(g, coord.G);
-        Assert.Equal(pss, coord.PSs);
+        var coord = GalacticCoordinates.FromUniversalAddress(coords.ua);
+        Assert.Equal(coords.gc, coord);
     }
 }

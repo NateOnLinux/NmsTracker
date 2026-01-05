@@ -1,3 +1,5 @@
+using NmsTracker.Domain.Discoveries;
+
 namespace NmsTracker.Domain.PlayerState;
 
 /// <summary>
@@ -50,6 +52,7 @@ public readonly record struct PlayerCoordinates
     public byte G { get; private init; }
 
     private readonly ushort _ss;
+    
     /// <summary>
     /// Solar System ID in range 0 &#8804; value &#8804; 4095
     /// </summary>
@@ -66,6 +69,7 @@ public readonly record struct PlayerCoordinates
     }
     
     private readonly byte _p;
+    
     /// <summary>
     /// Planet ID in range range 0 &#8804; value &#8804; 15
     /// </summary>
@@ -79,6 +83,14 @@ public readonly record struct PlayerCoordinates
                 throw new ArgumentOutOfRangeException(nameof(value));
             _p = value;
         }
+    }
+
+    public static PlayerCoordinates FromUniversalAddress(UniversalAddress ua)
+    {
+        var x = (short)(ua.X - 2048);
+        var z = (short)(ua.Z - 2048);
+        var y = (sbyte)(ua.Y - 128);
+        return new PlayerCoordinates(x, z, y, ua.G, ua.Ss, ua.P);
     }
 
     public PlayerCoordinates(short x, short z, sbyte y, byte g, ushort ss, byte p)

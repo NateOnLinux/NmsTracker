@@ -1,3 +1,4 @@
+using NmsTracker.Domain.Discoveries;
 using NmsTracker.Domain.PlayerState;
 using Xunit.Internal;
 
@@ -33,6 +34,20 @@ public class PlayerCoordinatesTest
     {
         const byte p = 16;
         Assert.Throws<ArgumentOutOfRangeException>(() => new PlayerCoordinates(0, 0, 0, 0, 0, p));
+    }
+
+    public static TheoryData<(UniversalAddress, PlayerCoordinates)> UAtoCoordinates =>
+    [
+        (new UniversalAddress(0UL), new PlayerCoordinates(-2048, -2048, -128, 0, 0, 0)),
+        (new UniversalAddress(0x00FFFFFFFFFFFFFF), new PlayerCoordinates(2047, 2047, 127, 255, 4095, 15)),
+        (new UniversalAddress(0x0080081358008135), new PlayerCoordinates(-1739, -2040, -40, 19, 8, 8))
+    ];
+    [Theory]
+    [MemberData(nameof(UAtoCoordinates))]
+    public void FromUniversalAddress_ProducesExpectedCoordinates((UniversalAddress ua, PlayerCoordinates pc) coords)
+    {
+        var coord = PlayerCoordinates.FromUniversalAddress(coords.ua);
+        Assert.Equal(coords.pc, coord);
     }
 
     [Theory]
