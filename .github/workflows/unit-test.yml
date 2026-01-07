@@ -4,6 +4,7 @@ on:
     branches: [ "actions-test" ]
   pull_request:
     branches: [ "actions-test" ]
+  workflow_dispatch:
 
 jobs:
   build:
