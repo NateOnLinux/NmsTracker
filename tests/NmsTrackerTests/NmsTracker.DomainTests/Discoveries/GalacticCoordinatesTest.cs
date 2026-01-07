@@ -7,7 +7,7 @@ public class GalacticCoordinatesTest
     public void X_OutOfRange_ThrowsArgumentOutOfRangeException()
     {
         const ushort x = 0x1000;
-        var aorEx = Assert.Throws<ArgumentOutOfRangeException>(() => new GalacticCoordinates(4096, 0, 0, 0));
+        var aorEx = Assert.Throws<ArgumentOutOfRangeException>(() => new GalacticCoordinates(x, 0, 0, 0));
         Assert.Equal("X", aorEx.ParamName);
     }
 
