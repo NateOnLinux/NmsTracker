@@ -1,9 +1,9 @@
 name: Avalonia
 on:
   push:
-    branches: [ "actions-test" ]
+    branches: [ "main", "actions-test" ]
   pull_request:
-    branches: [ "actions-test" ]
+    branches: [ "main", "actions-test" ]
   workflow_dispatch:
 
 jobs:
