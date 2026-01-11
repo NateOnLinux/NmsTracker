@@ -1,0 +1,37 @@
+name: CI PR to Main
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+          cache: true
+          # Cache deps for all projects
+          cache-dependency-path: |
+            src/**/packages.lock.json
+            tests/**/packages.lock.json
+      - name: Restore
+        run: dotnet restore --locked-mode
+      - name: Build
+        run: dotnet build -c Release --no-restore
+      - name: Unit Tests
+        run: dotnet test --no-build --parallel --logger "trx;LogFileName=TestResults.trx"
+        continue-on-error: true
+      - name: Publish Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: ./src/Test/TestResults/TestResults.trx
+      - name: Scan
+        run: dotnet list package --vulnerable
+      - name: Style
+        run: dotnet format --verify-no-changes
