@@ -23,7 +23,7 @@ public readonly record struct GalacticCoordinates
             _x = value;
         }
     }
-    
+
     private readonly ushort _z;
     /// <summary>
     /// Regional X Coordinate in range 0 &#8804; value &#8804; 4095
@@ -39,24 +39,24 @@ public readonly record struct GalacticCoordinates
             _z = value;
         }
     }
-    
+
     /// <summary>
     /// Regional Y Coordinate in range 0 &#8804; value &#8804; 255
     /// </summary>
     public byte Y { get; }
-    
+
     /// <summary>
     /// 4 byte Planet Index and 12 Byte Solar System Index<br/>
     /// See the No Man's Sky Wiki for more information about
     /// <see href="https://nomanssky.miraheze.org/wiki/Galactic_Coordinates">Galactic Coordinates</see><br/>
     /// </summary>
     public ushort PSs { get; }
-    
+
     /// <summary>
     /// Optional Galaxy ID in range 0 &#8804; value &#8804; 255
     /// </summary>
     public byte? G { get; }
-    
+
     /// <summary>
     /// Represents the decoded representation of the Universal Address<br/>
     /// The decoded coordinates are in the range X,Z: 0-4096, Y: 0-255, PSs: 4 bit Planet + 12 bit SolarSystem Index
@@ -69,7 +69,7 @@ public readonly record struct GalacticCoordinates
         PSs = pSs;
         G = g;
     }
-    
+
     public static GalacticCoordinates FromUniversalAddress(UniversalAddress ua)
     {
         var x = CoordinatesHelper.DecodeX(ua.X);

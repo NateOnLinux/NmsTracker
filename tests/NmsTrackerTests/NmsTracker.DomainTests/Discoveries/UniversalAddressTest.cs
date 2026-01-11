@@ -2,6 +2,7 @@ using NmsTracker.Domain.Discoveries;
 using NmsTracker.Domain.PlayerState;
 
 namespace NmsTracker.DomainTests.Discoveries;
+
 public class UniversalAddressTest
 {
     [Fact]
@@ -12,7 +13,7 @@ public class UniversalAddressTest
         var ua = new UniversalAddress(universalUlong);
         Assert.Equal(x, ua.X);
     }
-    
+
     [Fact]
     public void GetZ_ReturnsZ_IfZHasValue()
     {
@@ -21,7 +22,7 @@ public class UniversalAddressTest
         var ua = new UniversalAddress(universalUlong);
         Assert.Equal(z, ua.Z);
     }
-    
+
     [Fact]
     public void GetY_ReturnsY_IfYHasValue()
     {
@@ -30,7 +31,7 @@ public class UniversalAddressTest
         var ua = new UniversalAddress(universalUlong);
         Assert.Equal(y, ua.Y);
     }
-    
+
     [Fact]
     public void GetG_ReturnsG_IfGHasValue()
     {
@@ -39,7 +40,7 @@ public class UniversalAddressTest
         var ua = new UniversalAddress(universalUlong);
         Assert.Equal(g, ua.G);
     }
-    
+
     [Fact]
     public void GetSs_ReturnsSs_IfSsHasValue()
     {
@@ -48,7 +49,7 @@ public class UniversalAddressTest
         var ua = new UniversalAddress(universalUlong);
         Assert.Equal(ss, ua.Ss);
     }
-    
+
     [Fact]
     public void GetP_ReturnsP_IfPHasValue()
     {
@@ -71,7 +72,7 @@ public class UniversalAddressTest
         var pc = coords.ua.ToPlayerCoordinates();
         Assert.Equal(coords.pc, pc);
     }
-    
+
     [Theory]
     [MemberData(nameof(PlayerCoordinates))]
     public void FromPlayerCoordinates_ProducesExpectedAddress((UniversalAddress ua, PlayerCoordinates pc) coords)
@@ -93,7 +94,7 @@ public class UniversalAddressTest
         var gc = coords.ua.ToGalacticCoordinates();
         Assert.Equal(coords.gc, gc);
     }
-    
+
     [Theory]
     [MemberData(nameof(Coordinates))]
     public void FromGalacticCoordinates_ProducesExpectedAddress((UniversalAddress ua, GalacticCoordinates gc) coords)
@@ -101,14 +102,14 @@ public class UniversalAddressTest
         var ua = UniversalAddress.FromGalacticCoordinates(coords.gc);
         Assert.Equal(coords.ua, ua);
     }
-    
+
     [Fact]
     public void AllZero_UaProperties_ReturnExpected()
     {
         var ua = new UniversalAddress(0UL);
         Assert.All([ua.X, ua.Z, ua.Y, ua.G, ua.Ss, ua.P], v => Assert.Equal(0, v));
     }
-    
+
     [Fact]
     public void AllOnes_UaProperties_ReturnExpected()
     {
@@ -117,7 +118,7 @@ public class UniversalAddressTest
         Assert.All([ua.Y, ua.G], v => Assert.Equal(0xFF, v));
         Assert.Equal(0x0F, ua.P);
     }
-    
+
     [Theory]
     [InlineData(0x0080081358008135UL)]
     [InlineData(0x00FFFFFFFFFFFFFFUL)]
