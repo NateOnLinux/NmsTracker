@@ -8,7 +8,7 @@ namespace NmsTracker.Domain.PlayerState;
 public readonly record struct PlayerCoordinates
 {
     private readonly short _x;
-    
+
     /// <summary>
     /// Regional X Coordinate in range -2048 &#8804; value &#8804; 2047
     /// </summary>
@@ -23,9 +23,9 @@ public readonly record struct PlayerCoordinates
             _x = value;
         }
     }
-    
+
     private readonly short _z;
-    
+
     /// <summary>
     /// Regional Z Coordinate in range -2048 &#8804; value &#8804; 2047
     /// </summary>
@@ -40,19 +40,19 @@ public readonly record struct PlayerCoordinates
             _z = value;
         }
     }
-    
+
     /// <summary>
     /// Regional Y Coordinate in range -128 &#8804; value &#8804; 127
     /// </summary>
     public sbyte Y { get; private init; }
-    
+
     /// <summary>
     /// Galaxy ID in range 0 &#8804; value &#8804; 255
     /// </summary>
     public byte G { get; private init; }
 
     private readonly ushort _ss;
-    
+
     /// <summary>
     /// Solar System ID in range 0 &#8804; value &#8804; 4095
     /// </summary>
@@ -67,9 +67,9 @@ public readonly record struct PlayerCoordinates
             _ss = value;
         }
     }
-    
+
     private readonly byte _p;
-    
+
     /// <summary>
     /// Planet ID in range range 0 &#8804; value &#8804; 15
     /// </summary>

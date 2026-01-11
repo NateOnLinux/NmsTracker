@@ -1,6 +1,7 @@
 using NmsTracker.Domain.Discoveries;
 
 namespace NmsTracker.DomainTests.Discoveries;
+
 public class GalacticCoordinatesTest
 {
     [Fact]
@@ -18,7 +19,7 @@ public class GalacticCoordinatesTest
         var aorEx = Assert.Throws<ArgumentOutOfRangeException>(() => new GalacticCoordinates(0, z, 0, 0));
         Assert.Equal("Z", aorEx.ParamName);
     }
-    
+
     [Theory]
     [InlineData(0, 0, 0, 0, 0)]
     [InlineData(4095, 4095, 255, 0xFFFF, 255)]
