@@ -24,8 +24,7 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
       - name: Unit Tests
-        run: dotnet test --no-build --parallel --logger "trx;LogFileName=TestResults.trx"
-        continue-on-error: true
+        run: dotnet test --no-build --logger "trx;LogFileName=TestResults.trx"
       - name: Publish Test Results
         uses: actions/upload-artifact@v4
         with:
