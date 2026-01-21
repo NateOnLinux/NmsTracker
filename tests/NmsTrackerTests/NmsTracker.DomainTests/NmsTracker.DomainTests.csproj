@@ -32,4 +32,9 @@
     <ProjectReference Include="..\..\..\src\NmsTracker\NmsTracker.Domain\NmsTracker.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="VObs\" />
+  </ItemGroup>
+
 </Project>
