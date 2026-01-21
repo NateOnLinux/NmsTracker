@@ -1,5 +1,7 @@
 <Project>
     <PropertyGroup>
-        <TreatWarningsAsErrors />
+        <TreatWarningsAsErrors/>
+        <AnalysisMode>Recommended</AnalysisMode>
+        <AnalysisLevel>8.0</AnalysisLevel>
     </PropertyGroup>
 </Project>

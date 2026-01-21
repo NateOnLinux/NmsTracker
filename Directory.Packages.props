@@ -1,11 +1,12 @@
 <Project>
-  <!-- https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
-    <!-- Avalonia packages -->
-    <!-- Important: keep version in sync! -->
+      <!-- Avalonia packages -->
+      <!-- Important: keep version in sync! -->
     <PackageVersion Include="Avalonia" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.9" />
@@ -14,6 +15,7 @@
     <PackageVersion Include="Avalonia.iOS" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Browser" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Android" Version="11.3.9" />
+    <!--  -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Microsoft.NET.Sdk.WebAssembly.Pack" Version="10.0.1" />
     <PackageVersion Include="ScottPlot.Avalonia" Version="5.1.57" />
@@ -21,5 +23,8 @@
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="3.119.1" />
     <PackageVersion Include="SkiaSharp.NativeAssets.WebAssembly" Version="3.119.1" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="xunit.v3" Version="3.2.1" />
   </ItemGroup>
 </Project>
