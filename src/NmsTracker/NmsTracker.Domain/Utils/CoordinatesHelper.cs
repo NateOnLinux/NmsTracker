@@ -1,25 +1,9 @@
-using System.Runtime.CompilerServices;
+namespace NmsTracker.Domain.Utils;
 
-namespace NmsTracker.Domain.Helpers;
-
-public static class CoordinatesHelper
+internal static class CoordinatesHelper
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort DecodeX(ushort x) => UAtoGCLut12[x];
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort DecodeZ(ushort z) => UAtoGCLut12[z];
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort EncodeX(ushort x) => GCtoUALut12[x];
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort EncodeZ(ushort z) => GCtoUALut12[z];
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte DecodeY(byte y) => UAtoGCLut8[y];
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte EncodeY(byte y) => GCtoUALut8[y];
-
-    // Precomputed lookup tables
     /// <summary>
-    /// Lookup table for converting Universal Address to Galactic Coordinates.
+    /// Lookup table for converting Universal Address to Galactic Coordinates. (n + 127) mod 255
     /// </summary>
     /// <remarks>
     /// <list type="table">
@@ -36,7 +20,7 @@ public static class CoordinatesHelper
     ///   <item><term>0xFE</term><description>0x7F</description></item>
     /// </list>
     /// </remarks>
-    private static readonly byte[] UAtoGCLut8 =
+    internal static readonly byte[] UAtoGCLut8 =
     [
         0x7F, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E,
         0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E,
@@ -57,7 +41,7 @@ public static class CoordinatesHelper
     ];
 
     /// <summary>
-    /// Lookup table for converting Galactic Coordinates to Universal Address.
+    /// Lookup table for converting Galactic Coordinates to Universal Address. (n - 127) mod 255
     /// </summary>
     /// <remarks>
     /// <list type="table">
@@ -74,7 +58,7 @@ public static class CoordinatesHelper
     ///   <item><term>0xFE</term><description>0x7F</description></item>
     /// </list>
     /// </remarks>
-    private static readonly byte[] GCtoUALut8 =
+    internal static readonly byte[] GCtoUALut8 =
     [
         0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90,
         0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0,
@@ -95,7 +79,7 @@ public static class CoordinatesHelper
     ];
 
     /// <summary>
-    /// Lookup table for converting Universal Address to Galactic Coordinates.
+    /// Lookup table for converting Universal Address to Galactic Coordinates. (n + 2047) mod 4096
     /// </summary>
     /// <remarks>
     /// <list type="table">
@@ -112,7 +96,7 @@ public static class CoordinatesHelper
     ///   <item><term>0xFFE</term><description>0x7FF</description></item>
     /// </list>
     /// </remarks>
-    private static readonly ushort[] UAtoGCLut12 =
+    internal static readonly ushort[] UAtoGCLut12 =
     [
         0x7FF, 0x800, 0x801, 0x802, 0x803, 0x804, 0x805, 0x806, 0x807, 0x808, 0x809, 0x80A, 0x80B, 0x80C, 0x80D, 0x80E,
         0x80F, 0x810, 0x811, 0x812, 0x813, 0x814, 0x815, 0x816, 0x817, 0x818, 0x819, 0x81A, 0x81B, 0x81C, 0x81D, 0x81E,
@@ -373,7 +357,7 @@ public static class CoordinatesHelper
     ];
 
     /// <summary>
-    /// Lookup table for converting Galactic Coordinates to Universal Address.
+    /// Lookup table for converting Galactic Coordinates to Universal Address. (n - 2047) mod 4096
     /// </summary>
     /// <remarks>
     /// <list type="table">
@@ -390,7 +374,7 @@ public static class CoordinatesHelper
     ///   <item><term>0xFFE</term><description>0x7FF</description></item>
     /// </list>
     /// </remarks>
-    private static readonly ushort[] GCtoUALut12 =
+    internal static readonly ushort[] GCtoUALut12 =
     [
         0x801, 0x802, 0x803, 0x804, 0x805, 0x806, 0x807, 0x808, 0x809, 0x80A, 0x80B, 0x80C, 0x80D, 0x80E, 0x80F, 0x810,
         0x811, 0x812, 0x813, 0x814, 0x815, 0x816, 0x817, 0x818, 0x819, 0x81A, 0x81B, 0x81C, 0x81D, 0x81E, 0x81F, 0x820,
