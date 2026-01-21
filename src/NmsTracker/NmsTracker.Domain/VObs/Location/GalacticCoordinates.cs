@@ -37,7 +37,7 @@ public readonly record struct GalacticCoordinates
     /// Planet part extracted from <see cref="PSs"/>
     /// </summary>
     public byte P => (byte)(PSs >> 12);
-    
+
     /// <summary>
     /// Solar System part extracted from <see cref="PSs"/>
     /// </summary>

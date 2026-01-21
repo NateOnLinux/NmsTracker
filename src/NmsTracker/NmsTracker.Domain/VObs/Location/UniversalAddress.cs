@@ -30,7 +30,7 @@ public static class UniversalAddress
     public static ushort GetSs(this ulong ua) => (ushort)((ua & SsMask) >> 40);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static byte GetP(this ulong ua) => (byte)((ua & PMask) >> 52);
-    
+
     public static PlayerCoordinates ToPlayerCoordinates(ulong ua)
     {
         var (x, z, y) = DecodeCoordinates(ua.GetX(), ua.GetZ(), ua.GetY());
@@ -39,7 +39,7 @@ public static class UniversalAddress
         var pcY = (sbyte)(y - 127);
         return new PlayerCoordinates(pcX, pcZ, pcY, ua.GetG(), ua.GetSs(), ua.GetP());
     }
-    
+
     public static ulong FromPlayerCoordinates(PlayerCoordinates pc)
     {
         var gcX = (ushort)(pc.X + 2047);
@@ -48,25 +48,25 @@ public static class UniversalAddress
         var (uaX, uaZ, uaY) = EncodeCoordinates(gcX, gcZ, gcY);
         return Pack(uaX, uaZ, uaY, pc.G, pc.Ss, pc.P);
     }
-    
+
     public static GalacticCoordinates ToGalacticCoordinates(ulong ua)
     {
         var (x, z, y) = DecodeCoordinates(ua.GetX(), ua.GetZ(), ua.GetY());
         return new GalacticCoordinates(x, z, y, ua.GetG(), ua.GetSs(), ua.GetP());
     }
-    
+
     public static ulong FromGalacticCoordinates(GalacticCoordinates gc)
     {
         var (uaX, uaZ, uaY) = EncodeCoordinates(gc.X, gc.Z, gc.Y);
         return Pack(uaX, uaZ, uaY, gc.G, gc.Ss, gc.P);
     }
-    
+
     private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) =>
         x | ((ulong)z << 12) | ((ulong)y << 24) | ((ulong)g << 32) | ((ulong)ss << 40) | ((ulong)p << 52);
 
-    private static (ushort x, ushort z, byte y) DecodeCoordinates(ushort x, ushort z, byte y) => 
+    private static (ushort x, ushort z, byte y) DecodeCoordinates(ushort x, ushort z, byte y) =>
         (CH.UAtoGCLut12[x], CH.UAtoGCLut12[z], CH.UAtoGCLut8[y]);
-    
+
     private static (ushort x, ushort z, byte y) EncodeCoordinates(ushort x, ushort z, byte y) =>
         (CH.GCtoUALut12[x], CH.GCtoUALut12[z], CH.GCtoUALut8[y]);
 }
