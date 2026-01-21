@@ -1,27 +1,36 @@
 namespace NmsTracker.Domain.Utils;
 
-internal static class CoordinatesHelper
-{
-    /// <summary>
-    /// Lookup table for converting Universal Address to Galactic Coordinates. (n + 127) mod 255
-    /// </summary>
+internal static class CoordinatesHelper {
+    /// <summary> Lookup table for converting Universal Address to Galactic Coordinates. (n + 127) mod 255 </summary>
     /// <remarks>
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>GC</term>
-    ///     <description>UA</description>
-    ///   </listheader>
-    ///   <item><term>0x00</term><description>0x81</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0x7E</term><description>0xFF</description></item>
-    ///   <item><term>0x7F</term><description>0x00</description></item>
-    ///   <item><term>0x80</term><description>0x01</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0xFE</term><description>0x7F</description></item>
-    /// </list>
+    ///     <list type="table">
+    ///         <listheader>
+    ///             <term> GC </term> <description> UA </description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term> 0x00 </term><description> 0x81 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7E </term><description> 0xFF </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7F </term><description> 0x00 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x80 </term><description> 0x01 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0xFE </term><description> 0x7F </description>
+    ///         </item>
+    ///     </list>
     /// </remarks>
-    internal static readonly byte[] UAtoGCLut8 =
-    [
+    internal static readonly byte[] UAtoGCLut8 = [
         0x7F, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E,
         0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E,
         0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE,
@@ -40,26 +49,36 @@ internal static class CoordinatesHelper
         0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E
     ];
 
-    /// <summary>
-    /// Lookup table for converting Galactic Coordinates to Universal Address. (n - 127) mod 255
-    /// </summary>
+    /// <summary> Lookup table for converting Galactic Coordinates to Universal Address. (n - 127) mod 255 </summary>
     /// <remarks>
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>GC</term>
-    ///     <description>UA</description>
-    ///   </listheader>
-    ///   <item><term>0x00</term><description>0x81</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0x7E</term><description>0xFF</description></item>
-    ///   <item><term>0x7F</term><description>0x00</description></item>
-    ///   <item><term>0x80</term><description>0x01</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0xFE</term><description>0x7F</description></item>
-    /// </list>
+    ///     <list type="table">
+    ///         <listheader>
+    ///             <term> GC </term> <description> UA </description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term> 0x00 </term><description> 0x81 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7E </term><description> 0xFF </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7F </term><description> 0x00 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x80 </term><description> 0x01 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0xFE </term><description> 0x7F </description>
+    ///         </item>
+    ///     </list>
     /// </remarks>
-    internal static readonly byte[] GCtoUALut8 =
-    [
+    internal static readonly byte[] GCtoUALut8 = [
         0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90,
         0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0,
         0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0,
@@ -78,26 +97,36 @@ internal static class CoordinatesHelper
         0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x80
     ];
 
-    /// <summary>
-    /// Lookup table for converting Universal Address to Galactic Coordinates. (n + 2047) mod 4096
-    /// </summary>
+    /// <summary> Lookup table for converting Universal Address to Galactic Coordinates. (n + 2047) mod 4096 </summary>
     /// <remarks>
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>GC</term>
-    ///     <description>UA</description>
-    ///   </listheader>
-    ///   <item><term>0x000</term><description>0x801</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0x7FE</term><description>0xFFF</description></item>
-    ///   <item><term>0x7FF</term><description>0x000</description></item>
-    ///   <item><term>0x800</term><description>0x001</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0xFFE</term><description>0x7FF</description></item>
-    /// </list>
+    ///     <list type="table">
+    ///         <listheader>
+    ///             <term> GC </term> <description> UA </description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term> 0x000 </term><description> 0x801 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7FE </term><description> 0xFFF </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7FF </term><description> 0x000 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x800 </term><description> 0x001 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0xFFE </term><description> 0x7FF </description>
+    ///         </item>
+    ///     </list>
     /// </remarks>
-    internal static readonly ushort[] UAtoGCLut12 =
-    [
+    internal static readonly ushort[] UAtoGCLut12 = [
         0x7FF, 0x800, 0x801, 0x802, 0x803, 0x804, 0x805, 0x806, 0x807, 0x808, 0x809, 0x80A, 0x80B, 0x80C, 0x80D, 0x80E,
         0x80F, 0x810, 0x811, 0x812, 0x813, 0x814, 0x815, 0x816, 0x817, 0x818, 0x819, 0x81A, 0x81B, 0x81C, 0x81D, 0x81E,
         0x81F, 0x820, 0x821, 0x822, 0x823, 0x824, 0x825, 0x826, 0x827, 0x828, 0x829, 0x82A, 0x82B, 0x82C, 0x82D, 0x82E,
@@ -356,26 +385,36 @@ internal static class CoordinatesHelper
         0x7EF, 0x7F0, 0x7F1, 0x7F2, 0x7F3, 0x7F4, 0x7F5, 0x7F6, 0x7F7, 0x7F8, 0x7F9, 0x7FA, 0x7FB, 0x7FC, 0x7FD, 0x7FE
     ];
 
-    /// <summary>
-    /// Lookup table for converting Galactic Coordinates to Universal Address. (n - 2047) mod 4096
-    /// </summary>
+    /// <summary> Lookup table for converting Galactic Coordinates to Universal Address. (n - 2047) mod 4096 </summary>
     /// <remarks>
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>GC</term>
-    ///     <description>UA</description>
-    ///   </listheader>
-    ///   <item><term>0x000</term><description>0x801</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0x7FE</term><description>0xFFF</description></item>
-    ///   <item><term>0x7FF</term><description>0x000</description></item>
-    ///   <item><term>0x800</term><description>0x001</description></item>
-    ///   <item><term>…</term><description>…</description></item>
-    ///   <item><term>0xFFE</term><description>0x7FF</description></item>
-    /// </list>
+    ///     <list type="table">
+    ///         <listheader>
+    ///             <term> GC </term> <description> UA </description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term> 0x000 </term><description> 0x801 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7FE </term><description> 0xFFF </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x7FF </term><description> 0x000 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0x800 </term><description> 0x001 </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> … </term><description> … </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> 0xFFE </term><description> 0x7FF </description>
+    ///         </item>
+    ///     </list>
     /// </remarks>
-    internal static readonly ushort[] GCtoUALut12 =
-    [
+    internal static readonly ushort[] GCtoUALut12 = [
         0x801, 0x802, 0x803, 0x804, 0x805, 0x806, 0x807, 0x808, 0x809, 0x80A, 0x80B, 0x80C, 0x80D, 0x80E, 0x80F, 0x810,
         0x811, 0x812, 0x813, 0x814, 0x815, 0x816, 0x817, 0x818, 0x819, 0x81A, 0x81B, 0x81C, 0x81D, 0x81E, 0x81F, 0x820,
         0x821, 0x822, 0x823, 0x824, 0x825, 0x826, 0x827, 0x828, 0x829, 0x82A, 0x82B, 0x82C, 0x82D, 0x82E, 0x82F, 0x830,
