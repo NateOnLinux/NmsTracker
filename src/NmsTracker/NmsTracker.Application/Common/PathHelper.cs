@@ -1,6 +1,6 @@
 namespace NmsTracker.Application.Common;
 
-public class PathHelper() {
+public class PathHelper {
 
     public PathIsValidResult IsWellFormed(string path) {
         if (string.IsNullOrWhiteSpace(path)) {

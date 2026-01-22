@@ -55,8 +55,12 @@ public static class UniversalAddress {
         return Pack(uaX, uaZ, uaY, gc.G, gc.Ss, gc.P);
     }
 
-    private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) =>
-        x | ((ulong)z << 12) | ((ulong)y << 24) | ((ulong)g << 32) | ((ulong)ss << 40) | ((ulong)p << 52);
+    private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) => x |
+        ((ulong)z << 12) |
+        ((ulong)y << 24) |
+        ((ulong)g << 32) |
+        ((ulong)ss << 40) |
+        ((ulong)p << 52);
 
     private static (ushort x, ushort z, byte y) DecodeCoordinates(ushort x, ushort z, byte y) =>
         (CH.UAtoGCLut12[x], CH.UAtoGCLut12[z], CH.UAtoGCLut8[y]);
