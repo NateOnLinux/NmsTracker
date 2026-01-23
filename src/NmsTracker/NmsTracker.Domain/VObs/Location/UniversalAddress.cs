@@ -8,7 +8,6 @@ namespace NmsTracker.Domain.VObs.Location;
 /// The 64-bit value representing galaxy, region, solar system, and planet.<br /> See the No Man's Sky Wiki for
 /// more information about <see href="https://nomanssky.miraheze.org/wiki/Universal_Address"> Universal Address </see>
 /// </summary>
-/// <param name="Ua"> The 64-bit Universal Address </param>
 public static class UniversalAddress {
     private const ulong XMask = 0x00_0_000_00_00_000_FFFUL;
     private const ulong ZMask = 0x00_0_000_00_00_FFF_000UL;
