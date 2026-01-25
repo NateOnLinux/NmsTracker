@@ -1,3 +1,3 @@
-﻿namespace NmsTracker.Infrastructure;
+namespace NmsTracker.Infrastructure;
 
 public class Class1 { }

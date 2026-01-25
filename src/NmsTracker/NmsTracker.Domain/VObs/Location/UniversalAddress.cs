@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using NmsTracker.Domain.Entities.PlayerState;
 using CH = NmsTracker.Domain.Utils.CoordinatesHelper;
 
