@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\NmsTracker.Domain\NmsTracker.Domain.csproj"/>
+    </ItemGroup>
+
 </Project>

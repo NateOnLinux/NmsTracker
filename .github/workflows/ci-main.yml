@@ -1,36 +1,118 @@
-name: CI PR to Main
+name: NmsTracker Build
 on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+    
+env:
+  Solution_Name: NmsTracker.sln
+  Test_Dir: tests
+  Build_Config_Debug: Debug
+  Build_Config_Release: Release
+  Dotnet_Version: 10.0.102
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: ${{ env.Dotnet_Version }}
           cache: true
-          # Cache deps for all projects
           cache-dependency-path: |
             src/**/packages.lock.json
             tests/**/packages.lock.json
+            
+      - name: Info
+        run: dotnet --info
+
       - name: Restore
-        run: dotnet restore --locked-mode
+        run: dotnet restore ${{ env.Solution_Name }} --locked-mode
+        
       - name: Build
-        run: dotnet build -c Debug --no-restore
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            dotnet build ${{ env.Solution_Name }} -c ${{ env.Build_Config_Debug }} --no-restore --interactive=false \
+          --nologo 
+          else
+            dotnet build ${{ env.Solution_Name }} -c ${{ env.Build_Config_Release }} --no-restore
+          fi
+      - name: Publish Build
+        id: publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: |
+            src/**/bin
+            src/**/obj
+            tests/**/bin
+            tests/**/obj
+
+  roslyn:
+    name: Roslyn
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.Dotnet_Version }}
+
+      - name: Lint (dotnet format)
+        run: | 
+          dotnet format style --no-restore --verify-no-changes --verbosity diagnostic --severity warn --report \
+          roslyn-results.json
+
+      - name: Upload Roslyn Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Roslyn Results
+          path: roslyn-results.json
+    
+  resharper:
+    name: ReSharper
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        
+      - name: ReSharper InspectCode
+        uses: JetBrains/ReSharper-InspectCode@v0.11
+        with:
+          properties: 'RunAnalyzers=false'
+          build: 'False'
+          swea: true
+          verbosity: 'WARN'
+          sEverity: 'WARNING'
+          settings: .editorconfig
+          solution: ${{ env.Solution_Name }}
+          output: resharper-results.sarif.json
+          dotnetcoresdk: ${{ env.Dotnet_Version }}
+          
+  tests:
+    name: Unit Tests
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: build-artifact
+            
       - name: Unit Tests
         run: dotnet test --no-build --logger "trx;LogFileName=TestResults.trx"
+        
       - name: Publish Test Results
         uses: actions/upload-artifact@v4
         with:
           name: TestResults
           path: ./src/Test/TestResults/TestResults.trx
-      - name: Scan
-        run: dotnet list package --vulnerable
-      - name: Style
-        run: dotnet format --verify-no-changes

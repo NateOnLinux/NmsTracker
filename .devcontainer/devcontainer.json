@@ -1,0 +1,18 @@
+{
+	"name": "C# (.NET)",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:1-10.0-noble",
+	 "postCreateCommand": "apt update -y && apt install -y curl ",
+  "customizations" : {
+    "jetbrains" : {
+      "settings": {
+        "Git4Idea:app:Git-Application-Settings.staging_area_enabled": true,
+        "com.intellij:app:HttpConfigurable.use_proxy_pac": true
+      },
+      "backend" : "Rider",
+      "plugins" : [
+        "com.intellij.plugin.adernov.powershell",
+        "avalonia-rider"
+      ],
+    }
+  }
+}
