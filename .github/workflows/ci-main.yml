@@ -13,7 +13,8 @@ env:
   Build_Config_Release: Release
 
 jobs:
-  build:      
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,11 +22,14 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 8.0.416
           cache: true
           cache-dependency-path: |
             src/**/packages.lock.json
             tests/**/packages.lock.json
+            
+      - name: Info
+        run: dotnet --info
 
       - name: Restore
         run: dotnet restore ${{ env.Solution_Name }} --locked-mode
@@ -54,38 +58,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
           cache: true
           cache-dependency-path: |
             src/**/packages.lock.json
             tests/**/packages.lock.json
+
       - name: Lint (dotnet format)
         run: | 
-          dotnet format \
-          --no-restore \
-          --verify-no-changes \
-          --verbosity normal \
-          --severity warn \
-          --report roslyn-results.sarif.json
+          dotnet format style --no-restore --verify-no-changes --verbosity diagnostic --severity warn --report \
+          roslyn-results.json
 
-      - name: Upload Roslyn SARIF
+      - name: Upload Roslyn Results
         if: always()
-        uses: github/codeql-action/upload-sarif@v2
+        uses: actions/upload-artifact@v4
         with:
-          sarif_file: roslyn-results.sarif.json
+          name: Roslyn Results
+          path: roslyn-results.json
     
   resharper:
     name: ReSharper
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         
       - name: ReSharper InspectCode
         uses: JetBrains/ReSharper-InspectCode@v0.11
@@ -100,9 +101,11 @@ jobs:
           output: resharper-results.sarif.json
           
       - name: Upload ReSharper SARIF
-        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: resharper-results.sarif.json
+          category: ReSharper
           
   tests:
     name: Unit Tests
