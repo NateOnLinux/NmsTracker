@@ -9,7 +9,7 @@ env:
   Test_Dir: tests
   Build_Config_Debug: Debug
   Build_Config_Release: Release
-  Dotnet_Version: 8.0.x
+  Dotnet_Version: 10.0.102
 
 jobs:
   build:
