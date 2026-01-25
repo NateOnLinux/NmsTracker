@@ -11,12 +11,13 @@ env:
   Test_Dir: tests
   Build_Config_Debug: Debug
   Build_Config_Release: Release
-  Dotnet_Version: 8.0.416
+  Dotnet_Version: 8.0.x
+  OS: ubuntu-24.04 [Beta]
 
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.OS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -24,7 +25,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.Dotnet_Version }}
-          
           cache: true
           cache-dependency-path: |
             src/**/packages.lock.json
@@ -39,7 +39,7 @@ jobs:
       - name: Build
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            dotnet build ${{ env.Solution_Name }} -c ${{ env.Build_Config_Debug }} --no-restore --interactive=false \ 
+            dotnet build ${{ env.Solution_Name }} -c ${{ env.Build_Config_Debug }} --no-restore --interactive=false \
           --nologo 
           else
             dotnet build ${{ env.Solution_Name }} -c ${{ env.Build_Config_Release }} --no-restore
@@ -57,7 +57,7 @@ jobs:
 
   roslyn:
     name: Roslyn
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.OS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -81,7 +81,7 @@ jobs:
     
   resharper:
     name: ReSharper
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.OS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -102,7 +102,7 @@ jobs:
   tests:
     name: Unit Tests
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.OS }}
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v5
