@@ -11,7 +11,7 @@ env:
   Test_Dir: tests
   Build_Config_Debug: Debug
   Build_Config_Release: Release
-  Dotnet_Version: 10.0.100
+  Dotnet_Version: 8.0.416
 
 jobs:
   build:
