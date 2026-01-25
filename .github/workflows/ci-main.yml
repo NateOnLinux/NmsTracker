@@ -11,6 +11,7 @@ env:
   Test_Dir: tests
   Build_Config_Debug: Debug
   Build_Config_Release: Release
+  Dotnet_Version: 10.0.100
 
 jobs:
   build:
@@ -18,11 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.416
+          dotnet-version: ${{ env.Dotnet_Version }}
+          
           cache: true
           cache-dependency-path: |
             src/**/packages.lock.json
@@ -63,11 +65,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 8.0.x
-          cache: true
-          cache-dependency-path: |
-            src/**/packages.lock.json
-            tests/**/packages.lock.json
+          dotnet-version: ${{ env.Dotnet_Version }}
 
       - name: Lint (dotnet format)
         run: | 
@@ -95,17 +93,11 @@ jobs:
           build: 'False'
           swea: true
           verbosity: 'WARN'
-          sEverity: 'WARN'
+          sEverity: 'WARNING'
           settings: .editorconfig
           solution: ${{ env.Solution_Name }}
           output: resharper-results.sarif.json
-          
-      - name: Upload ReSharper SARIF
-        if: always()
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: resharper-results.sarif.json
-          category: ReSharper
+          dotnetcoresdk: ${{ env.Dotnet_Version }}
           
   tests:
     name: Unit Tests
