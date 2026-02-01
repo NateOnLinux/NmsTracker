@@ -16,11 +16,11 @@ public static class UniversalAddress {
     private const ulong SsMask = 0x00_0_FFF_00_00_000_000UL;
     private const ulong PMask = 0x00_F_000_00_00_000_000UL;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort GetX(this ulong ua) => (ushort)((ua & XMask) >> 0);
+    public static short GetX(this ulong ua) => (short)((ua & XMask) >> 0);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort GetZ(this ulong ua) => (ushort)((ua & ZMask) >> 12);
+    public static short GetZ(this ulong ua) => (short)((ua & ZMask) >> 12);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte GetY(this ulong ua) => (byte)((ua & YMask) >> 24);
+    public static sbyte GetY(this ulong ua) => (sbyte)((ua & YMask) >> 24);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static byte GetG(this ulong ua) => (byte)((ua & GMask) >> 32);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +40,7 @@ public static class UniversalAddress {
         var gcX = (ushort)(pc.X + 2047);
         var gcZ = (ushort)(pc.Z + 2047);
         var gcY = (byte)(pc.Y + 127);
-        (ushort uaX, ushort uaZ, byte uaY) = EncodeCoordinates(gcX, gcZ, gcY);
+        (short uaX, short uaZ, sbyte uaY) = EncodeCoordinates(gcX, gcZ, gcY);
         return Pack(uaX, uaZ, uaY, pc.G, pc.Ss, pc.P);
     }
 
@@ -50,20 +50,20 @@ public static class UniversalAddress {
     }
 
     public static ulong FromGalacticCoordinates(GalacticCoordinates gc) {
-        (ushort uaX, ushort uaZ, byte uaY) = EncodeCoordinates(gc.X, gc.Z, gc.Y);
+        (short uaX, short uaZ, sbyte uaY) = EncodeCoordinates(gc.X, gc.Z, gc.Y);
         return Pack(uaX, uaZ, uaY, gc.G, gc.Ss, gc.P);
     }
 
-    private static ulong Pack(ushort x, ushort z, byte y, byte g, ushort ss, byte p) => x |
-        ((ulong)z << 12) |
-        ((ulong)y << 24) |
+    private static ulong Pack(short x, short z, sbyte y, byte g, ushort ss, byte p) => (ushort)x |
+        (((ulong)(ushort)z) << 12) |
+        (((ulong)(byte)y) << 24) |
         ((ulong)g << 32) |
         ((ulong)ss << 40) |
         ((ulong)p << 52);
 
-    private static (ushort x, ushort z, byte y) DecodeCoordinates(ushort x, ushort z, byte y) =>
-        (CH.UAtoGCLut12[x], CH.UAtoGCLut12[z], CH.UAtoGCLut8[y]);
+    private static (ushort x, ushort z, byte y) DecodeCoordinates(short x, short z, sbyte y) => (
+        CH.UAtoGCLut12[(ushort)x], CH.UAtoGCLut12[(ushort)z], CH.UAtoGCLut8[(byte)y]);
 
-    private static (ushort x, ushort z, byte y) EncodeCoordinates(ushort x, ushort z, byte y) =>
+    private static (short x, short z, sbyte y) EncodeCoordinates(ushort x, ushort z, byte y) =>
         (CH.GCtoUALut12[x], CH.GCtoUALut12[z], CH.GCtoUALut8[y]);
 }

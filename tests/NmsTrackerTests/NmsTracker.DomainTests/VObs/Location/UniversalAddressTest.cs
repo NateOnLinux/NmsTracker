@@ -38,7 +38,7 @@ public class UniversalAddressTest {
     [InlineData(0x00FFFFFFFFFFFFFFUL, 0xFFF)]
     [InlineData(0xFFFFFFFFFFFFFFFFUL, 0xFFF)]
     public void GetX_ReturnsX(ulong ua, ushort expect) {
-        Assert.Equal(expect, ua.GetX());
+        Assert.Equal(expect, (ushort)ua.GetX());
     }
 
     [Theory]
@@ -47,7 +47,7 @@ public class UniversalAddressTest {
     [InlineData(0x00FFFFFFFFFFFFFFUL, 0xFFF)]
     [InlineData(0xFFFFFFFFFFFFFFFFUL, 0xFFF)]
     public void GetZ_ReturnsZ(ulong ua, ushort expect) {
-        Assert.Equal(expect, ua.GetZ());
+        Assert.Equal(expect, (ushort)ua.GetZ());
     }
 
     [Theory]
@@ -56,7 +56,7 @@ public class UniversalAddressTest {
     [InlineData(0x00FFFFFFFFFFFFFFUL, 0x0FF)]
     [InlineData(0xFFFFFFFFFFFFFFFFUL, 0x0FF)]
     public void GetY_ReturnsY(ulong ua, byte expect) {
-        Assert.Equal(expect, ua.GetY());
+        Assert.Equal(expect, (byte)ua.GetY());
     }
 
     [Theory]
@@ -87,7 +87,8 @@ public class UniversalAddressTest {
     }
     [Theory]
     [MemberData(nameof(PcUa))]
-    public void FromPlayerCoordinates_ProducesExpectedUniversalAddress(PlayerCoordinates pc, ulong ua) {
+    public void FromPlayerCoordinates_ProducesExpectedUniversalAddress(PlayerCoordinates pc,
+        ulong ua) {
         ulong coord = UniversalAddress.FromPlayerCoordinates(pc);
         Assert.Equal(ua, coord);
     }
@@ -99,13 +100,15 @@ public class UniversalAddressTest {
     }
     [Theory]
     [MemberData(nameof(GcUa))]
-    public void FromGalacticCoordinates_ProducesExpectedUniversalAddress(GalacticCoordinates gc, ulong ua) {
+    public void FromGalacticCoordinates_ProducesExpectedUniversalAddress(GalacticCoordinates gc,
+        ulong ua) {
         ulong coord = UniversalAddress.FromGalacticCoordinates(gc);
         Assert.Equal(ua, coord);
     }
     [Theory]
     [MemberData(nameof(UaGc))]
-    public void ToGalacticCoordinates_ProducesExpectedCoordinates(ulong ua, GalacticCoordinates gc) {
+    public void
+        ToGalacticCoordinates_ProducesExpectedCoordinates(ulong ua, GalacticCoordinates gc) {
         var coord = UniversalAddress.ToGalacticCoordinates(ua);
         Assert.Equal(gc, coord);
     }
