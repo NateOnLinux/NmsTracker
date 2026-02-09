@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="src/NmsTracker/NmsTracker/Views/MainView.axaml" value="src/NmsTracker/NmsTracker.Desktop/NmsTracker.Desktop.csproj" />
+        <entry key="src/NmsTracker/NmsTracker/Views/MainWindow.axaml" value="src/NmsTracker/NmsTracker.Desktop/NmsTracker.Desktop.csproj" />
       </map>
     </option>
   </component>

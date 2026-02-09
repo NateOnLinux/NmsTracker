@@ -1,5 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+using ReactiveUI;
 
 namespace NmsTracker.ViewModels;
 
-public abstract class ViewModelBase : ObservableObject { }
+public abstract class ViewModelBase : ReactiveObject { }

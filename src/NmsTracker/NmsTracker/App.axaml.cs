@@ -1,10 +1,12 @@
-using System.Linq;
+using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using NmsTracker.ViewModels;
 using NmsTracker.Views;
+using ReactiveUI;
+using Splat;
 
 namespace NmsTracker;
 
@@ -14,33 +16,33 @@ public class App : Application {
     }
 
     public override void OnFrameworkInitializationCompleted() {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-            DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow =
-                new MainWindow {
-                    DataContext = new MainViewModel()
-                };
-        }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
-            singleViewPlatform.MainView =
-                new MainView {
-                    DataContext = new MainViewModel()
-                };
+        RegisterServices();
+
+        switch (ApplicationLifetime) {
+            case IClassicDesktopStyleApplicationLifetime cds:
+                cds.MainWindow = AppLocator.Current.GetService<IViewFor<MainViewModel>>() as Window;
+                break;
+            case ISingleViewApplicationLifetime sv:
+                sv.MainView =
+                    AppLocator.Current.GetService<IViewFor<MainViewModel>>() as UserControl;
+                break;
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private static void DisableAvaloniaDataAnnotationValidation() {
-        // Get an array of plugins to remove
-        DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+    public override void RegisterServices() {
+        base.RegisterServices();
+        IMutableDependencyResolver s = AppLocator.CurrentMutable;
+        s.RegisterLazySingleton(() => new MainViewModel(), typeof(MainViewModel));
 
-        // remove each entry found
-        foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove) {
-            BindingPlugins.DataValidators.Remove(plugin);
+        switch (ApplicationLifetime) {
+            case IClassicDesktopStyleApplicationLifetime:
+                s.Register(() => new MainWindow(), typeof(IViewFor<MainViewModel>));
+                break;
+            case ISingleViewApplicationLifetime:
+                s.Register(() => new MainView(), typeof(IViewFor<MainViewModel>));
+                break;
         }
     }
 }
