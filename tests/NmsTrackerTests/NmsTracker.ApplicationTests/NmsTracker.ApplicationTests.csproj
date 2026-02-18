@@ -24,13 +24,20 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Microsoft.Reactive.Testing"/>
         <PackageReference Include="Moq" />
         <PackageReference Include="xunit.v3"/>
         <PackageReference Include="xunit.runner.visualstudio"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Saves\"/>
+        <ProjectReference Include="..\..\..\src\NmsTracker\NmsTracker.Application\NmsTracker.Application.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="System.Reactive">
+            <HintPath>..\..\..\..\..\..\.nuget\packages\system.reactive\6.1.0\lib\net6.0\System.Reactive.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>
