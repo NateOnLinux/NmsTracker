@@ -1,7 +1,11 @@
+using NmsTracker.Domain.VObs.Saves;
+
 namespace NmsTracker.Domain.Entities.Saves;
 
-public readonly record struct Save(Name Name, PlatformId PlatformId, SaveId ContainerId, DateTime LastModifyTime) { }
-
-public readonly record struct Name(string Value);
-
-public readonly record struct SaveId(string Value);
+public sealed record Save(
+    SaveId SaveId,
+    PlatformId PlatformId,
+    string Name,
+    bool IsLoaded,
+    bool IsSynced,
+    DateTime? LastWriteTime);

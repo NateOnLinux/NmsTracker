@@ -1,6 +1,6 @@
-namespace NmsTracker.Application.Saves.Models;
+namespace NmsTracker.Domain.VObs.Saves;
 
-public enum Platform {
+public enum PlatformId {
     Unknown,
     Steam,
     Microsoft,
