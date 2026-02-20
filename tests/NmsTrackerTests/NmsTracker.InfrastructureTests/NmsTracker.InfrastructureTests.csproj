@@ -23,9 +23,20 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="libNOM.io"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Microsoft.Reactive.Testing"/>
+        <PackageReference Include="Moq"/>
         <PackageReference Include="xunit.v3"/>
         <PackageReference Include="xunit.runner.visualstudio"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\NmsTracker\NmsTracker.Infrastructure\NmsTracker.Infrastructure.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Saves\" />
     </ItemGroup>
 
 </Project>

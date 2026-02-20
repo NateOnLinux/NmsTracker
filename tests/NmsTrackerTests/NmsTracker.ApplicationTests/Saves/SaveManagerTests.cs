@@ -39,7 +39,7 @@ public class SaveListenerTests {
 
         IReadOnlyList<Save> saves = [];
 
-        SaveListener sut = new(adapter.Object);
+        SaveManager sut = new(adapter.Object);
         using IDisposable sub = sut.Saves.Subscribe(s => saves = s);
 
         scheduler.Start();
@@ -64,7 +64,7 @@ public class SaveListenerTests {
         Mock<IPlatformAdapter> adapter = new();
         adapter.Setup(a => a.PlatformsObservable).Returns(platformSubject);
 
-        SaveListener sut = new(adapter.Object);
+        SaveManager sut = new(adapter.Object);
         using IDisposable sub = sut.Saves.Subscribe(s => saves = s);
 
         scheduler.Start();

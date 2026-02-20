@@ -14,6 +14,7 @@
     <PackageVersion Include="Avalonia.iOS" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Browser" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Android" Version="11.3.9" />
+      <PackageVersion Include="libNOM.io" Version="0.14.2"/>
       <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.1.0"/>
       <PackageVersion Include="Moq" Version="4.20.72"/>
       <PackageVersion Include="ReactiveUI.Avalonia" Version="11.3.8"/>

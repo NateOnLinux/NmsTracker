@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\NmsTracker.Application\NmsTracker.Application.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="libNOM.io"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Saves\" />
+    </ItemGroup>
+
 </Project>
