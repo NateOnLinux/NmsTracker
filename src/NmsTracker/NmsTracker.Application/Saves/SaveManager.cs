@@ -8,11 +8,13 @@ public class SaveManager {
     public SaveManager(IPlatformAdapter adapter) {
         _adapter = adapter;
         Saves =
-            adapter.PlatformsObservable.Select(ps => ps.SelectMany(p => p.Saves).ToList()).Replay(1)
-                .RefCount();
+            adapter.PlatformsObservable
+                .Select(ps =>
+                    new SaveChangeEvent([.. ps.Platforms.SelectMany(p => p.Saves)], ps.Timestamp))
+                .Replay(1).RefCount();
     }
-    
-    public IObservable<IReadOnlyList<Save>> Saves { get; }
+
+    public IObservable<SaveChangeEvent> Saves { get; }
 
     public void Load(Save save) {
         _adapter.Load(save);

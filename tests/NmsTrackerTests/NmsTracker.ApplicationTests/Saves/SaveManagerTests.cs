@@ -6,70 +6,81 @@ using NmsTracker.Domain.VObs.Saves;
 
 namespace NmsTracker.ApplicationTests.Saves;
 
-public class SaveListenerTests {
-
-    public static TheoryData<List<Platform>> Platforms => [
-        new List<Platform>(),
-        new List<Platform>([new Platform(PlatformId.Steam, new DirectoryInfo("~/Steam"), [])])
-    ];
+public class SaveManagerTests : ReactiveTest {
     [Fact]
-    public void Saves_EmitsSaves_WhenPlatformsObservableEmits() {
+    public void Saves_EmitsCombinedSaves_WhenPlatformsObservableEmits() {
         TestScheduler scheduler = new();
-        // Build save data
-        Save save1 =
-            new(new SaveId("Save 1"), PlatformId.Steam, "Steam-01", false, true, DateTime.MinValue);
-        Save save2 =
-            new(new SaveId("Save 2"), PlatformId.Steam, "Steam-02", false, true, DateTime.MinValue);
-        Save save3 =
-            new(new SaveId("Save 1"), PlatformId.Gog, "Gog-01", false, true, DateTime.MinValue);
-        Save save4 =
-            new(new SaveId("Save 2"), PlatformId.Gog, "Gog-02", false, true, DateTime.MinValue);
-        Platform platformSteam =
-            new(PlatformId.Steam, new DirectoryInfo("./Steam-Test"), [save1, save2]);
-        Platform platformGog = new(PlatformId.Gog, new DirectoryInfo("./Gog-Test"), [save3, save4]);
-        List<Platform> platforms = [platformSteam, platformGog];
 
-        ITestableObservable<List<Platform>> platformSubject =
-            scheduler.CreateColdObservable(ReactiveTest.OnNext(10, platforms),
-                ReactiveTest.OnCompleted<List<Platform>>(10));
+        Save saveA = Save("A", PlatformId.Steam);
+        Save saveB = Save("B", PlatformId.Microsoft);
 
-        Mock<IPlatformAdapter> adapter = new();
+        Platform platform1 = Platform(PlatformId.Steam, saveA);
+        Platform platform2 = Platform(PlatformId.Microsoft, saveB);
 
-        adapter.Setup(a => a.PlatformsObservable).Returns(platformSubject);
+        ITestableObservable<PlatformChangeEvent> platformEvents =
+            scheduler.CreateColdObservable(
+                OnNext(100, new PlatformChangeEvent([platform1], DateTimeOffset.MinValue)),
+                OnNext(200,
+                    new PlatformChangeEvent([platform1, platform2], DateTimeOffset.MinValue)));
 
-        IReadOnlyList<Save> saves = [];
+        Mock<IPlatformAdapter> adapterMock = Mock<IPlatformAdapter>();
+        adapterMock.Setup(a => a.PlatformsObservable).Returns(platformEvents);
 
-        SaveManager sut = new(adapter.Object);
-        using IDisposable sub = sut.Saves.Subscribe(s => saves = s);
+        var manager = new SaveManager(adapterMock.Object);
+
+        ITestableObserver<SaveChangeEvent> observer = scheduler.CreateObserver<SaveChangeEvent>();
+        manager.Saves.Subscribe(observer);
 
         scheduler.Start();
 
-        Assert.NotNull(saves);
-        Assert.Equal(4, saves.Count);
-        Assert.Contains(save1, saves);
-        Assert.Contains(save2, saves);
-        Assert.Contains(save3, saves);
-        Assert.Contains(save4, saves);
+        Assert.Equal(2, observer.Messages.Count);
+        Assert.Equal(saveA, observer.Messages[0].Value.Value.Saves[0]);
+        Assert.Equal(saveA, observer.Messages[1].Value.Value.Saves[0]);
+        Assert.Equal(saveB, observer.Messages[1].Value.Value.Saves[1]);
     }
-    [Theory]
-    [MemberData(nameof(Platforms))]
-    public void Saves_EmitsEmptyList_WhenPlatformsNullOrEmpty(List<Platform> platforms) {
+
+    [Fact]
+    public void Saves_ReplaysLastValueToNewSubscribers() {
         TestScheduler scheduler = new();
-        ITestableObservable<List<Platform>> platformSubject =
-            scheduler.CreateColdObservable(ReactiveTest.OnNext(10, platforms),
-                ReactiveTest.OnCompleted<List<Platform>>(10));
 
-        IReadOnlyList<Save> saves = [];
+        Save saveA = Save("A", PlatformId.Steam);
+        Platform platform1 = Platform(PlatformId.Steam, saveA);
 
-        Mock<IPlatformAdapter> adapter = new();
-        adapter.Setup(a => a.PlatformsObservable).Returns(platformSubject);
+        ITestableObservable<PlatformChangeEvent> platformEvents =
+            scheduler.CreateColdObservable(OnNext(100,
+                new PlatformChangeEvent([platform1], DateTimeOffset.MinValue)));
 
-        SaveManager sut = new(adapter.Object);
-        using IDisposable sub = sut.Saves.Subscribe(s => saves = s);
+        Mock<IPlatformAdapter> adapterMock = Mock<IPlatformAdapter>();
+        adapterMock.Setup(a => a.PlatformsObservable).Returns(platformEvents);
+
+        var manager = new SaveManager(adapterMock.Object);
+
+        ITestableObserver<SaveChangeEvent> observer1 = scheduler.CreateObserver<SaveChangeEvent>();
+        manager.Saves.Subscribe(observer1);
 
         scheduler.Start();
+        Assert.Single(observer1.Messages);
+        Assert.Equal(saveA, observer1.Messages[0].Value.Value.Saves[0]);
 
-        Assert.NotNull(saves);
-        Assert.Equal(0, saves.Count);
+        ITestableObserver<SaveChangeEvent> observer2 = scheduler.CreateObserver<SaveChangeEvent>();
+        manager.Saves.Subscribe(observer2);
+
+        Assert.Single(observer2.Messages);
+        Assert.Equal(saveA, observer2.Messages[0].Value.Value.Saves[0]);
     }
+
+    #region Helpers
+
+    private static Platform Platform(PlatformId id, params Save[] saves) {
+        return new Platform(id, new DirectoryInfo("."), saves);
+    }
+    private static Save Save(string name, PlatformId platform) {
+        return new Save(new SaveId(name), platform, name, false, true, DateTime.MinValue);
+    }
+    private static Mock<T> Mock<T>() where T : class {
+        return new Mock<T>(MockBehavior.Strict);
+    }
+
+    #endregion
+
 }
