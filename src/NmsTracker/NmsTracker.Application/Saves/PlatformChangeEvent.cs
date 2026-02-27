@@ -1,4 +1,4 @@
-using NmsTracker.Application.Shared;
+using NmsTracker.Application.Common;
 using NmsTracker.Domain.Entities.Saves;
 
 namespace NmsTracker.Application.Saves;

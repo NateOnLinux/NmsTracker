@@ -1,3 +1,3 @@
-namespace NmsTracker.Application.Shared;
+namespace NmsTracker.Application.Common;
 
 public abstract record ChangeEvent(DateTimeOffset Timestamp);
