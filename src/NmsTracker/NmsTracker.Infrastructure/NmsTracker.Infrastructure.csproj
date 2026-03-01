@@ -14,8 +14,4 @@
         <PackageReference Include="libNOM.io"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Saves\" />
-    </ItemGroup>
-
 </Project>
