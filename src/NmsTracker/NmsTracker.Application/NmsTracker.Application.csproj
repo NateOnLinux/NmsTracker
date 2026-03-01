@@ -9,11 +9,8 @@
     <ItemGroup>
         <ProjectReference Include="..\NmsTracker.Domain\NmsTracker.Domain.csproj"/>
     </ItemGroup>
-
     <ItemGroup>
-        <Reference Include="System.Reactive">
-            <HintPath>..\..\..\..\..\..\.nuget\packages\system.reactive\6.1.0\lib\net6.0\System.Reactive.dll</HintPath>
-        </Reference>
+        <PackageReference Include="System.Reactive"/>
+        <PackageReference Include="System.Reactive.Linq"/>
     </ItemGroup>
-
 </Project>
