@@ -20,7 +20,7 @@ public class SaveManager {
         _adapter.Load(save);
     }
 
-    public void Unload(Save save) {
-        _adapter.Unload(save);
+    public void Unload() {
+        _adapter.Unload();
     }
 }

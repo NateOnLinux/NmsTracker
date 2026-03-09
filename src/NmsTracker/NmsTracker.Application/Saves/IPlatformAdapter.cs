@@ -6,5 +6,5 @@ public interface IPlatformAdapter {
     IObservable<PlatformChangeEvent> PlatformsObservable { get; }
 
     void Load(Save save);
-    void Unload(Save save);
+    void Unload();
 }

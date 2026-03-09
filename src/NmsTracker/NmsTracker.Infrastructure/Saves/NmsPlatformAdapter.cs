@@ -44,19 +44,8 @@ public class NmsPlatformAdapter : IPlatformAdapter {
         p.Load(c);
     }
 
-    public void Unload(Save save) {
-        ReloadExcept(save);
-    }
-
-    private void ReloadExcept(Save excludedSave) {
-        List<Save> remainingSaves =
-            _platformCollection.SelectMany(GetSaves).Where(s => s != excludedSave).ToList();
-
+    public void Unload() {
         _platformCollection.Reinitialize();
-
-        foreach (Save s in remainingSaves) {
-            Load(s);
-        }
     }
 
     private PlatformChangeEvent ConstructPlatformChangeEvent() {
@@ -83,8 +72,9 @@ public class NmsPlatformAdapter : IPlatformAdapter {
     }
 
     private IContainer? GetContainer(Save save) {
-        return GetPlatform(save.PlatformId)?.GetSaveContainers()
-            .FirstOrDefault(c => c.Identifier == save.SaveId.Value);
+        IPlatform? platform = GetPlatform(save.PlatformId);
+        IEnumerable<IContainer>? containers = platform?.GetSaveContainers();
+        return containers?.FirstOrDefault(c => c.Identifier == save.SaveId.Value);
     }
 
     private List<IPlatform> GetPlatforms() => _platformCollection.ToList();
