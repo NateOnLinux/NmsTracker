@@ -14,7 +14,41 @@ namespace NmsTracker.InfrastructureTests.Saves;
 
 public class NmsPlatformAdapterTests {
     [Fact]
-    public void Load_ShouldInvokePlatform() {
+    public void Load_WhenPlatformMissing_ShouldThrowInvalidOperation() {
+        Mock<IPlatform> nonSteamPlatformMock = Mock<IPlatform>();
+        nonSteamPlatformMock.Setup(p => p.GetSaveContainers()).Returns([]);
+        nonSteamPlatformMock.Setup(p => p.PlatformEnum).Returns(PlatformEnum.Unknown);
+        // Non-steam platform
+        PlatformCollection collection = CreateCollectionWith(nonSteamPlatformMock.Object);
+        NmsPlatformAdapter adapter = new(collection, Options());
+        //  Save with 'Steam' platform identifier
+        Save save = new(new SaveId("id"), PlatformId.Steam, "id", false, false, DateTime.MinValue);
+        // Platform 'Steam' not present in the collection -> InvalidOperationException
+        Assert.Throws<InvalidOperationException>(() => adapter.Load(save));
+        nonSteamPlatformMock.Verify(p => p.GetSaveContainers(), Times.Never);
+    }
+
+    [Fact]
+    public void Load_WhenContainerMissing_ShouldThrowInvalidOperation() {
+        Mock<IPlatform> platform = Mock<IPlatform>();
+
+        platform.Setup(p => p.PlatformEnum).Returns(PlatformEnum.Steam);
+        platform.Setup(p => p.GetSaveContainers()).Returns([]);
+
+        PlatformCollection collection = CreateCollectionWith(platform.Object);
+
+        NmsPlatformAdapter adapter = new(collection, Options());
+
+        Save save =
+            new(new SaveId("missing"), PlatformId.Steam, "missing", false, false,
+                DateTime.MinValue);
+        Assert.Throws<InvalidOperationException>(() => adapter.Load(save));
+        platform.Verify(p => p.GetSaveContainers(), Times.Once);
+        platform.Verify(p => p.Load(It.IsAny<IContainer>()), Times.Never);
+    }
+
+    [Fact]
+    public void Load_WithExistingData_ShouldInvokeLoad() {
         const PlatformId platformid = PlatformId.Steam;
         const PlatformEnum platform = PlatformEnum.Steam;
         const string saveid = "save-1";
@@ -40,12 +74,7 @@ public class NmsPlatformAdapterTests {
 
         PlatformCollection pc = CreateCollectionWith(platformMock.Object);
 
-        // Mock Options
-        Mock<IOptionsMonitor<PlatformOptions>> optionsMock =
-            Mock<IOptionsMonitor<PlatformOptions>>();
-        optionsMock.SetupGet(o => o.CurrentValue).Returns(new PlatformOptions());
-
-        NmsPlatformAdapter adapter = new(pc, optionsMock.Object);
+        NmsPlatformAdapter adapter = new(pc, Options());
         adapter.Load(s);
 
         platformMock.Verify(p => p.Load(containerMock.Object), Times.Once);
@@ -72,6 +101,11 @@ public class NmsPlatformAdapterTests {
     }
     private static Mock<T> Mock<T>() where T : class {
         return new Mock<T>(MockBehavior.Strict);
+    }
+    private static IOptionsMonitor<PlatformOptions> Options() {
+        Mock<IOptionsMonitor<PlatformOptions>> options = Mock<IOptionsMonitor<PlatformOptions>>();
+        options.Setup(o => o.CurrentValue).Returns(new PlatformOptions());
+        return options.Object;
     }
 
     #endregion

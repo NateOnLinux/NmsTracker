@@ -35,7 +35,7 @@ public class NmsPlatformAdapter : IPlatformAdapter {
             throw new InvalidOperationException();
         }
 
-        IContainer? c = GetContainer(save);
+        IContainer? c = GetContainer(p, save);
 
         if (c is null) {
             throw new InvalidOperationException();
@@ -71,10 +71,9 @@ public class NmsPlatformAdapter : IPlatformAdapter {
         return GetPlatforms().FirstOrDefault(p => p.PlatformEnum == platformId.ToPlatformEnum());
     }
 
-    private IContainer? GetContainer(Save save) {
-        IPlatform? platform = GetPlatform(save.PlatformId);
-        IEnumerable<IContainer>? containers = platform?.GetSaveContainers();
-        return containers?.FirstOrDefault(c => c.Identifier == save.SaveId.Value);
+    private static IContainer? GetContainer(IPlatform platform, Save save) {
+        IEnumerable<IContainer> containers = platform.GetSaveContainers();
+        return containers.FirstOrDefault(c => c.Identifier == save.SaveId.Value);
     }
 
     private List<IPlatform> GetPlatforms() => _platformCollection.ToList();
